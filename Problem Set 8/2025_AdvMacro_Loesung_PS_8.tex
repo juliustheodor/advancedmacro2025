@@ -1,0 +1,493 @@
+\documentclass[9pt, xcolor=table, aspectratio=169]{beamer}
+\parindent0pt \parskip0.6\baselineskip
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+\usepackage[utf8]{inputenc}
+\setbeamersize{text margin left=5mm,text margin right=5mm}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{xspace}
+\usepackage{bm}
+\usepackage{eso-pic}
+\usepackage{hyperref}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+\definecolor{gray}{rgb}{0.66, 0.66, 0.66}
+\definecolor{maroon}{rgb}{0.5, 0.0, 0.0}
+\definecolor{cadmiumgreen}{rgb}{0.0, 0.42, 0.24}
+\title{\textcolor{HD}{Advanced Macroeconomics }}
+\subtitle{\textcolor{HD}{Tutorial 8: Empirical Business Cycles \& Stochastic Processes}}
+\date{\today}
+\date{}
+\author{Julius Schoelkopf, M.Sc.}
+\institute{Alfred-Weber-Institute for Economics, Heidelberg University}
+\hypersetup{colorlinks,linkcolor=,urlcolor=HD}
+
+\usepackage{tikz}
+\usepackage{amsmath}
+\usetikzlibrary{arrows,shapes}
+
+\setbeamercolor{background canvas}{bg=white}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.15}
+\usepackage{mathrsfs}
+\usetikzlibrary{arrows}
+\usepackage{pifont}
+\setbeamercolor{alerted text}{fg=HD}
+\definecolor{HD}{HTML}{C61826} % Uni Heidelberg color 
+\titlegraphic{\hfill\includegraphics[height=1.5cm]{figures/unihei_logo_4c.pdf}} %Logo Uni HD
+\usepackage{bm}
+\setbeamercolor{frametitle}{fg=white,bg=HD}
+\setbeamercolor{progress bar}{fg=HD,bg=white}
+\setbeamercolor{title separator}{fg=HD,bg=white}
+\newcommand{\p}{\mathrm{Pr}}
+\newcommand{\ve}{\varepsilon}
+\newcommand{\plim}{\text{plim}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\rk}{\text{rk}}
+\newcommand{\Var}{\text{Var}}
+\newcommand{\Cov}{\text{Cov}}
+\renewcommand{\baselinestretch}{1.1}
+\newcommand{\can}{\citeasnoun}
+\newcommand{\argmin}[1]{\underset{#1}{\operatorname{arg}\!\operatorname{min}}\;}
+\setbeamercolor{caption name}{fg=HD}
+\setbeamertemplate{footline}
+{
+	\leavevmode%
+	\hbox{%‚
+		\begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=2ex,center]{institute in head/foot}%
+			\usebeamerfont{title in head/foot}%
+			Tutorial 8 (Empirical Business Cycles)
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=2ex,center]{institute in head/foot}%
+			\usebeamerfont{title in head/foot}%
+			\insertshorttitle
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=0.18\paperwidth,ht=2.25ex,dp=2ex,right]{institute in head/foot}%
+			\usebeamerfont{title in head/foot}
+			\insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+	\end{beamercolorbox}}%
+}
+\newcommand{\cmark}{\ding{51}}%
+\usepackage{tikz}
+\usepackage{framed, color}
+\definecolor{shadecolor}{rgb}{0.66, 0.66, 0.66}
+
+
+\begin{document}
+\maketitle
+
+\begin{frame}{Where are we?}
+
+\begin{enumerate}
+  \item Introduction (Problem Set 1) 
+  \item  Growth (Problem Sets 2 - 5) 
+  \begin{itemize}
+  \item Solow Model: Romer (2018) Chapter 1
+\item  The Ramsey Model: Romer Chapter 2.A
+\item  The AK Model: Barro and Sala-i-Martin (2003) Chapter 4.1-4.2
+\end{itemize}
+
+  \item  \textcolor{HD}{\textbf{Real Business Cycle Theory}} (Problem Sets 8 - 11) 
+  \begin{itemize}
+  \item Basic concepts (Problem Sets 6 and 7) 
+  \item \textcolor{HD}{\textbf{Introduction to Real Business Cycle Theory}}: Romer Chapter 5 (Problem Set 8) 
+  \item Solving the model (e.g., Linearization and Method of undetermined coefficients, Problem Set 9 - 11)  
+  \item Empirics (Problem Set 10, Exercise 2) 
+\end{itemize}
+
+  \item  New Keynesian Economics (Problem Set 12) 
+  \begin{itemize}
+ \item Workhorse Model: Galí Chapter 1 and Chapter 3
+ \item  Monetary Policy, Empirics: Christiano et al. (1999)
+ \item  Monetary Policy, Theory: Galí (2002)	
+\end{itemize}
+
+\end{enumerate}
+
+\end{frame}
+
+
+
+\begin{frame}{Some Notation for Time Series}
+A time series is a collection of observations indexed by the date of each observation. Usually, we have collected data beginning at some particular date (say, $t=1$ ) and ending at another (say, $t=T$): $$\left(y_1, y_2, \ldots, y_T\right)$$
+\begin{itemize}
+\item The first lag of a time series $Y_t$ is $Y_{t-1}$; its $j$ th lag is $Y_{t-j}$.
+\item The first difference of a series, $\Delta Y_t$, is its change between periods $t-1$ and $t$, that is, $\Delta Y_t=Y_t-Y_{t-1}$.
+\item The first difference of the logarithm of $Y_t$ is $\Delta \ln \left(Y_t\right)=\log \left(Y_t\right)-\log \left(Y_{t-1}\right)$.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Covariance Stationarity}
+
+ \metroset{block=fill}
+  \begin{alertblock}{Covariance Stationarity (Weak Stationarity)}
+A time series $Y_t$ is weakly stationary if:
+\begin{enumerate}
+  \item  $\mathbb{E} [Y_t ] = \mu_t=\mu<\infty$ for all $t$
+  \item  $\operatorname{Cov}\left(Y_t, Y_{t-j}\right) = \gamma_{j, t}=\gamma_j<\infty$ for all $t$ and all $j$.
+\end{enumerate}
+
+  \end{alertblock}
+That is, a covariance stationary time series has no trend. 
+
+\textbf{Example:} Consider the AR(1) $Y_t = \rho Y_{t-1} + \varepsilon_t$ where $\varepsilon_t \sim \mathcal{N} (0,1)$ and $\rho < 1$. 
+
+When allowing for a \textcolor{HD}{deterministic trend}, a process is called trend stationary
+$$
+Y_t=\mu+ \beta t +  \varepsilon_t
+$$
+since taking the deterministic trend off $Y_t$, we are left with a stationary model. 
+	
+\end{frame}
+
+
+\begin{frame}{Problem Set 7, Question 1: Empirical Business Cycles} 
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 1}}
+   Download data for GDP, consumption, and investment for Germany. Choose quarterly data for at least 10 years (for example, from 1996 to 2023). A reliable source for aggregate time series is provided by \href{https://fred.stlouisfed.org}{FRED} or \href{http://ec.europa.eu/eurostat/data/database}{Eurostat}. Make sure to choose \emph{real} (at constant prices) and \emph{seasonally-adjusted} time series. For the following exercises, you might use the software package of your choice (e.g., Matlab, Stata, R).
+\end{alertblock} 
+\end{frame}
+
+
+\begin{frame}{Transformation of time series:  Why look at $\log(GDP_t)$ and not $GDP_t$? }
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 1.1}}
+ Take the logarithm of the series before detrending the data. Why is the logarithm a useful transformation?  \end{alertblock} 
+
+\pause 
+ Suppose the growth rate of GDP is $g$: $\; Y_{t+1}=(1+g) Y_t$
+ 
+A simple derivation yields a useful approximation: The log difference is (approximately) equal to the growth rate 
+$$
+\begin{aligned}
+ \log \left(Y_{t+1}\right)&=\log \left((1+g) Y_t\right) \\
+&=\log (1+g)+\log \left(Y_t\right) \\
+& \approx g+\log \left(Y_t\right) \Rightarrow \log \left(Y_{t+1}\right)-\log \left(Y_t\right) \approx g
+\end{aligned} $$ 
+\end{frame}
+
+
+\begin{frame}{Motivation: How can we see the business cycle in the data?} 
+\begin{figure}[hbt]
+  \includegraphics[width=0.9\textwidth]{figures/Figure1GermanGDP.png}
+  \caption{Real German GDP (seasonally-adjusted) as a measure of real activity.}
+\end{figure}
+\end{frame}
+
+
+
+
+\begin{frame}{Estimating a linear trend}
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 1.2}}
+Using time series data on German GDP, estimate a linear trend model using ordinary least squares (OLS). Once you have estimated the linear trend, plot the observed GDP values and the fitted trend line on the same graph. Briefly discuss the limitations of using a linear trend model to capture GDP fluctuations over time \end{alertblock} 
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\pause Decompose log(GDP) into a trend ($z_t$) and cyclical ($c_t$) component: $$\log(GDP_t) = y_t = z_t + c_t$$ 
+We could simply estimate a linear (deterministic) trend
+$$
+\log \left(GDP_t\right)=\beta_0+\beta_1 t+\varepsilon_t
+$$
+where $\beta_1$ is the trend growth rate and $\varepsilon_t$ are the deviations from the trend. 
+\end{column}
+
+\begin{column}{0.5\textwidth}
+	\begin{figure}[hbt]
+  \includegraphics[width=1.05\textwidth]{figures/Figure2GermanGDPLinearTrend.png} \vspace{-0.4cm} 
+  \caption{Estimated linear trend for German GDP.}
+\end{figure}
+\end{column}
+\end{columns} 
+
+\end{frame}
+
+\begin{frame}{Estimating a linear trend: Result depends on the sample over which we estimate the trend}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[hbt]
+\includegraphics[width=1.05\textwidth]{figures/Figure3GermanGDPLinearTrendSamples.png}
+\caption{Different estimated linear trends for German GDP.}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+	\begin{itemize}
+  	\item Structural changes in the economy can affect the trend growth rate (e.g., population growth may change, pandemic)
+  	\item To capture structural factors, we need to allow for time variation in the trend growth rate  
+  	\item Define the trend growth rate
+
+$$
+\frac{Z_t - Z_{t-1}}{Z_{t-1}}= \frac{Z_t}{Z_{t-1}}-1 \simeq \log \frac{Z_t}{Z_{t-1}}=z_t-z_{t-1}
+$$
+Denote the change of the trend growth rate by $v_t$
+$$
+\left(z_t-z_{t-1}\right)-\left(z_{t-1}-z_{t-2}\right)=v_t
+$$
+\end{itemize}
+
+\end{column}
+\end{columns} 
+
+\end{frame}
+
+
+
+\begin{frame}{Hodrick–Prescott filter} 
+ \metroset{block=fill}
+  \begin{alertblock}{Hodrick–Prescott filter}
+The Hodrick–Prescott filter filter formally captures the tradeoff between a smooth and a time varying trend growth rate: 
+$$
+\min \sum_t c_t^2+\lambda \sum_t v_t^2 = \min \left\{\sum_{t=1}^T\left(y_t-\tau_t\right)^2+\lambda \sum_{t=1}^T\left(\Delta z_t-\Delta z_{t-1}\right)^2\right\} $$
+where $\lambda$ captures how much one cares about the smoothness of the trend and $\Delta z_t = z_t - z_{t-1}$. 
+\end{alertblock}
+       
+Allowing for a change in trend growth lowers $\sum_t c_t^2$ but increases $\sum_t v_t^2$
+
+
+\end{frame}
+
+
+\begin{frame}{Application: Hodrick–Prescott filter} 
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 1.3 and 1.4}}
+Use the Hodrick-Prescott (1997) filter to detrend the data with a smoothing coefficient of $\lambda=1600$ (built-in function in Matlab/Stata/EViews, otherwise available \href{https://dge.repec.org/cgi-bin/hpfilter.cgi}{here}). Plot the detrended series, the trend component, and the raw data for all three variables.
+\end{alertblock} 
+\end{frame}
+
+
+\begin{frame}{Hodrick–Prescott filter} 
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{figures/Figure4.png} \vspace{-1cm}
+  \caption{Time series and estimated trend.} 
+\end{figure}
+\end{frame}
+
+\begin{frame}{Hodrick–Prescott filter} 
+\vspace{-0.3cm}
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{figures/Figure5.png} \vspace{-1cm}
+  \caption{Estimated cyclical component.} 
+\end{figure}
+\end{frame}
+
+\begin{frame}{Hodrick–Prescott filter: Role of $\lambda$} 
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 1.5}}
+Briefly discuss the role of $\lambda$ for the estimated trend. What are potential disadvantages of the Hodrick-Prescott filter? 	
+\end{alertblock}
+
+
+The HP filter formally captures the tradeoff between a smooth and a time varying trend growth rate: 
+$$
+\min \sum_t c_t^2+\lambda \sum_t v_t^2 = \min \left\{\sum_{t=1}^T\left(y_t-\tau_t\right)^2+\lambda \sum_{t=1}^T\left(\Delta z_t-\Delta z_{t-1}\right)^2\right\} $$
+where $\lambda$ captures how much one cares about the smoothness of the trend and $\Delta z_t = z_t - z_{t-1}$. 
+
+\end{frame} 
+
+\begin{frame}{Hodrick–Prescott filter: Role of $\lambda$}
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\begin{itemize} 
+\item For $\lambda \rightarrow 0$ we get
+$$
+\sum_t\left(\log \left(Y_t\right)-z_t\right)^2
+$$
+The time trend $z_t$ that minimizes this loss function is simply $\log \left(Y_t\right)=z_t$ $\Rightarrow$ There is no cycle!
+\item As $\lambda \rightarrow \infty$, the Hodrick-Prescott  filter is a linear time trend. 
+\item Ravn and Uhlig (2002) suggest to adjust the HP filter to the frequency of the observations: $\lambda_{\text {quarterly}}=1600$, $\lambda_{\text {annual}}=$ $1600 / 4^4=6.25$  and $\lambda_{\text {monthly}}=$ $1600 \cdot 3^4$. 
+\end{itemize} 	
+\end{column}
+
+\begin{column}{0.6\textwidth}
+
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{figures/Figure6.png}
+  \caption{The effect of different $\lambda$ on the estimated trend}
+\end{figure}
+\end{column}
+\end{columns}	
+\end{frame}
+
+
+\begin{frame}{Hodrick–Prescott filter:  Instability at the margin} 
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{figures/Figure7.png}
+  \caption{Instability of the HP trend at the margin - GDP trend for Germany}
+\end{figure}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{figures/Figure8.png}
+  \caption{Instability of the HP cycle at the margin - GDP cycle for Germany}
+\end{figure}
+\end{column}
+\end{columns}	
+\end{frame}
+
+
+\begin{frame}{Discussion of the Hodrick–Prescott filter}
+ \begin{itemize}
+  \item HP filter offers a reasonable approach to detrending GDP and is widely used but there exist other filters. 
+  \item HP filter uses unknowable future values that could not be recognized in real-time and the filter has an end-of-sample bias. 
+  \item Hamilton (2018, \textit{Why You Should Never Use the Hodrick-Prescott Filter}) argues that the HP filter introduces spurious dynamic relations that have no basis in the underlying DGP  
+ 	\begin{itemize}
+  \item Detrending a random walk can generate spurious dynamics 
+  \item Suppose $GDP_t$ is $I(1)$, and the $c_t$ would be white noise; the cycle would be random and exhibit no smooth cycles 
+\end{itemize}
+\item Hamilton (2018) proposes an alternative to isolate the cyclical component of a non-stationary time series, avoiding its drawbacks, but it can alter the variances of the different frequencies captured in an estimated cyclical component (Schüler, 2024).  
+\end{itemize}
+	
+\end{frame}
+
+
+
+\begin{frame}{How does consumption vary with the business cycle?} 
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 1.6}}
+
+Calculate the standard deviations of consumption and investment relative to that of GDP.
+\end{alertblock} 
+\pause 
+\begin{itemize}
+  \item We get $\sigma_i = 0.029 > \sigma_y = 0.017   > \sigma_c =  0.016 $ which yields the following ratios:  
+$$ \frac{\sigma_c}{\sigma_y} = 0.916 \quad \quad  \frac{\sigma_i}{\sigma_y} = 1.706$$ 
+
+ \item  Consumption and investment are procyclical. 
+ \item Consumption is less volatile than output, and investment is more volatile than output. 
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Stochastic Processes} 
+
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 2.1}}
+Consider the stochastic process for technology in the baseline RBC model from the lecture given by
+        \begin{equation*}
+        \ln A_t = \bar{A} + gt + \tilde{A}_t \quad \text{with} \quad \tilde{A}_t = \rho_A\tilde{A}_{t-1}+\varepsilon_{A,t},
+        \end{equation*}
+        where $\bar{A}$ is a constant, $g$ denotes the deterministic growth rate and $\varepsilon_{A,t} \overset{i.i.d.}{\sim}N(0,\sigma^2_A)$ is a technology shock. $A_0$ is given.
+         
+Express $\ln A_1$, $\ln A_2$ and $\ln A_3$ in terms of $\ln
+        A_0$, $\varepsilon_{A,1}$, $\varepsilon_{A,2}$, $\varepsilon_{A,3}$, $\bar{A}$ and $g$.
+\end{alertblock}
+
+\vspace{3.5cm} 
+	
+\end{frame}
+
+\begin{frame}{Stochastic Processes} 
+	
+\end{frame}
+
+
+\begin{frame}{Stochastic Processes} 
+
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 2.2}}
+What are the time-zero expectations of $\ln A_1$, $\ln A_2$, $\ln A_3$ and $\ln A_\infty$?
+\end{alertblock}
+
+\vspace{5cm} 
+
+\end{frame}
+
+\begin{frame}{Stochastic Processes} 
+	
+\end{frame}
+
+
+\begin{frame}{Stochastic Processes} 
+
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 2.3}}
+Suppose that technology is only driven by the stochastic term $\tilde{A}_t$, i.e. set $\bar{A}=g=0$, and assume $A_0=1$ and $\rho_A=0.5$. Compute $\ln A_t$ for $t=\{1,...,5\}$ given that
+\begin{itemize}
+\item[a)] no shock hits the economy.
+\item[b)] a one-time unity shock hits the economy in period 1, i.e. $\varepsilon_{A,1}=1$.
+\end{itemize}
+	
+\end{alertblock}
+
+\vspace{4.5cm} 
+
+\end{frame}
+
+\begin{frame}{Stochastic Processes: One-time unity shock when $rho_A = 0.5$}
+
+\begin{figure}[hbt]
+  \includegraphics[width=0.6\textwidth]{figures/Figure9ARprocess.png}\vspace{-0.4cm} 
+  \caption{Stochastic process for technology for  $\rho_A = 0.5$.}
+\end{figure}
+	
+\end{frame}
+
+
+\begin{frame}{Stochastic Processes} 
+
+\metroset{block=fill}
+\begin{alertblock}{\textcolor{blue}{Question 2.4}}
+Repeat 3b) for the cases $\rho_A=0, \enspace \rho_A=1, \enspace \rho_A=1.5$.
+\end{alertblock}
+\pause 
+\centering 
+   \begin{tabular}{l|c|c|c} \hline\hline
+                $\ln A_t$ & $\rho_A=0$ & $\rho_A=1$ & $\rho_A=1.5$\\ \hline
+                $\ln A_1$ & 1 & 1 & 1\\
+                $\ln A_2$ & 0 & 1 & 1.5\\
+                $\ln A_3$ & 0 & 1 & 2.25\\
+                $\ln A_4$ & 0 & 1 & 3.375\\
+                $\ln A_5$ & 0 & 1 & 5.0625\\
+                \hline\hline 
+            \end{tabular}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Question 2.4.: Role of persistence in the AR-technology process} 
+
+\begin{figure}[hbt]
+  \includegraphics[width=0.6\textwidth]{figures/Figure10ARprocessallrho.png}\vspace{-0.4cm} 
+  \caption{Stochastic process for technology for $\rho_A = 0.0$, $\rho_A = 0.5$, $\rho_A = 1$, and $\rho_A = 1.5$.}
+\end{figure}
+
+	
+\end{frame}
+
+
+
+\begin{frame}{Summary and Outlook} 
+
+\begin{itemize}
+\item Economic fluctuations do not underly simple repeating patterns. 
+\item The trend observed in the data doesn’t seem to be as rigid as a deterministic trend.
+\item We can use the HP filter to extract the trend and cycle, but you need to be careful using the HP filter. 
+\item Investment is more volatile than output. Output is more volatile than consumption. 
+\item In the RBC Model (Problem sets 10 and 11), we want to match the cyclicality of the data using a simple model.	
+\end{itemize}
+
+\textbf{Further Reading:}
+\begin{itemize}
+\item Romer (2019): Chapter 5.1-5.3.
+  \item  Mitman, Kurt (2024):
+\href{https://phdmacrobook.org/wp-content/uploads/2024/09/MACROECONOMICS_Consistent_2024_09_13.pdf}{Real Business Cycles. In: Macroeconomics}. Chapter 13.1. to 13.3.2. for a discussion of the HP filter and a more detailed discussion of business cycles. 
+\item  Hansen (2023): Econometrics. Chapters 14.1-14.21 and 14.41 are for a technical introduction of AR processes and detrending. 
+\end{itemize}
+
+\end{frame}
+
+
+\end{document}
