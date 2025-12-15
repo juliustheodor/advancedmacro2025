@@ -44,7 +44,7 @@ i = table2array(invest(:,2)); % Investment
 save macrodata.mat 
 
 % Specify time variable.
-t = (1996.0:0.25:2025.25)';
+t = (1996.0:0.25:2025.5)';
 
 %% Figure 1: Time series of German GDP 
 figure 

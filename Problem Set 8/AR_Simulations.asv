@@ -1,0 +1,43 @@
+%% Simulate three AR(1) processes (T=200) and plot in one joint figure
+% y_t = phi * y_{t-1} + eps_t,  eps_t ~ N(0,1)
+
+clear; clc; close all;
+
+% -----------------------
+% Settings
+% -----------------------
+T   = 200;
+phi = [0.8, 0.3, 1];      % AR coefficients
+rng(1,'twister');           % reproducibility
+
+% LaTeX everywhere
+set(groot,'defaultTextInterpreter','latex');
+set(groot,'defaultLegendInterpreter','latex');
+set(groot,'defaultAxesTickLabelInterpreter','latex');
+
+% -----------------------
+% Simulation
+% -----------------------
+epsi = randn(T, numel(phi));     % innovations
+y    = zeros(T, numel(phi));
+
+% Initial condition (can be changed as desired)
+y(1,:) = epsi(1,:);
+
+for t = 2:T
+    y(t,:) = phi .* y(t-1,:) + epsi(t,:);
+end
+
+
+tgrid = 1:T;
+
+figure('Color','w');
+tl = tiledlayout(3,1,'TileSpacing','compact','Padding','compact');
+plot(tgrid, y(:,1), 'LineWidth', 1.2);
+plot(tgrid, y(:,2), 'LineWidth', 1.2);
+plot(tgrid, y(:,3), 'LineWidth', 1.2);
+grid on; box on;
+ylabel(sprintf('$y_t$ \\, (\\phi=%.1f)$', phi(i)));
+xlim([1 T]);
+xlabel('$t$');
+title(tl, sprintf('Simulated AR(1) processes: $y_t=\\phi y_{t-1}+\\varepsilon_t$, $T=%d$', T));
