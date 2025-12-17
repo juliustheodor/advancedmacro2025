@@ -147,10 +147,10 @@ since taking the deterministic trend off $Y_t$, we are left with a stationary mo
 \end{frame}
 
 
-\begin{frame}{Example: AR(1) processes} 
+\begin{frame}{Example: Three AR(1) processes} 
 \begin{figure}[hbt]
-  \includegraphics[width=0.8\textwidth]{figures/Figure0.png}
-  \caption{Three AR(1) processes obtained from the same shock series. }
+  \includegraphics[width=0.8\textwidth]{figures/Figure0.png} \vspace{-0.5cm} 
+  \caption{Three AR(1) processes $Y_t = \rho Y_{t-1} + \varepsilon_t$ obtained from the same shock series $\varepsilon_t \sim \mathcal{N} (0,1)$. }
 \end{figure}
 \end{frame}
 
@@ -184,7 +184,7 @@ $$
 
 \begin{frame}{Motivation: How can we see the business cycle in the data?} 
 \begin{figure}[hbt]
-  \includegraphics[width=0.9\textwidth]{figures/Figure1GermanGDP.png}
+  \includegraphics[width=0.9\textwidth]{figures/Figure1GermanGDP.png} \vspace{-0.8cm} 
   \caption{Real German GDP (seasonally-adjusted) as a measure of real activity.}
 \end{figure}
 \end{frame}
@@ -208,7 +208,7 @@ where $\beta_1$ is the trend growth rate and $\varepsilon_t$ are the deviations 
 
 \begin{column}{0.5\textwidth}
 	\begin{figure}[hbt]
-  \includegraphics[width=1.05\textwidth]{figures/Figure2GermanGDPLinearTrend.png} \vspace{-0.4cm} 
+  \includegraphics[width=1.05\textwidth]{figures/Figure2GermanGDPLinearTrend.png} \vspace{-0.6cm} 
   \caption{Estimated linear trend for German GDP.}
 \end{figure}
 \end{column}
@@ -270,7 +270,7 @@ Use the Hodrick-Prescott (1997) filter to detrend the data with a smoothing coef
 
 \begin{frame}{Hodrick–Prescott filter} 
 \begin{figure}[hbt]
-  \includegraphics[width=0.98\textwidth]{figures/Figure4.png} \vspace{-0.8cm}
+  \includegraphics[width=0.9\textwidth]{figures/Figure4.png} \vspace{-0.8cm}
   \caption{Time series and estimated trend.} 
 \end{figure}
 \end{frame}
@@ -278,7 +278,7 @@ Use the Hodrick-Prescott (1997) filter to detrend the data with a smoothing coef
 \begin{frame}{Hodrick–Prescott filter} 
 \vspace{-0.3cm}
 \begin{figure}[hbt]
-  \includegraphics[width=0.98\textwidth]{figures/Figure5.png} \vspace{-0.8cm}
+  \includegraphics[width=0.9\textwidth]{figures/Figure5.png} \vspace{-0.8cm}
   \caption{Estimated cyclical component.} 
 \end{figure}
 \end{frame}
@@ -286,11 +286,11 @@ Use the Hodrick-Prescott (1997) filter to detrend the data with a smoothing coef
 \begin{frame}{Hodrick–Prescott filter: Role of $\lambda$} 
 \metroset{block=fill}
 \begin{alertblock}{\textcolor{blue}{Question 1.5}}
-Briefly discuss the role of $\lambda$ for the estimated trend. What are potential disadvantages of the Hodrick-Prescott filter? 	
+Briefly discuss the role of $\lambda$ for the estimated trend. What are the potential disadvantages of the Hodrick-Prescott filter? 	
 \end{alertblock}
 
 
-The HP filter formally captures the tradeoff between a smooth and a time varying trend growth rate: 
+The HP filter formally captures the tradeoff between a smooth and a time-varying trend growth rate: 
 $$
 \min \sum_t c_t^2+\lambda \sum_t v_t^2 = \min \left\{\sum_{t=1}^T\left(y_t-\tau_t\right)^2+\lambda \sum_{t=1}^T\left(\Delta z_t-\Delta z_{t-1}\right)^2\right\} $$
 where $\lambda$ captures how much one cares about the smoothness of the trend and $\Delta z_t = z_t - z_{t-1}$. 
@@ -428,12 +428,22 @@ Suppose that technology is only driven by the stochastic term $\tilde{A}_t$, i.e
 	
 \end{alertblock}
 
-\vspace{4.5cm} 
+Assumptions: $\bar{A}=g=0$, $A_0=1$, $\rho_A=0.5$ (stationary process).
+            \begin{itemize}
+            \item[a)] $\varepsilon_{A,t} = 0 \; \forall t \iff \ln A_t = 0 \; \forall t$
+            \item[b)] $\varepsilon_{A,1} = 1, \; \varepsilon_{A,t} = 0 \; \forall t\neq 1$:
+            \begin{align*}
+                \ln A_1 &= \varepsilon_{A,1} = 1\\
+                \ln A_2 &= \rho_A \varepsilon_{A,1} + \varepsilon_{A,2} = 0.5\cdot1 = 0.5\\
+                \ln A_3 &= \rho_A^2 \varepsilon_{A,1} + \rho_A \varepsilon_{A,2} + \varepsilon_{A,3} = 0.5^2\cdot1 = 0.25\\
+                \ln A_4 &= \rho_A^3 \varepsilon_{A,1} + \rho_A^2 \varepsilon_{A,2} + \rho_A \varepsilon_{A,3} + \varepsilon_{A,4} = 0.5^3 \cdot 1 = 0.125\\
+                \ln A_5 &= \rho_A^4 \varepsilon_{A,1} + \rho_A^3 \varepsilon_{A,2} + \rho_A^2 \varepsilon_{A,3} + \rho_A \varepsilon_{A,4} + \varepsilon_{A,5} = 0.5^4 \cdot 1 = 0.0625
+            \end{align*}
+\end{itemize} 
 
 \end{frame}
 
 \begin{frame}{Stochastic Processes: One-time unity shock when $rho_A = 0.5$}
-
 \begin{figure}[hbt]
   \includegraphics[width=0.6\textwidth]{figures/Figure9ARprocess.png}\vspace{-0.4cm} 
   \caption{Stochastic process for technology for  $\rho_A = 0.5$.}
